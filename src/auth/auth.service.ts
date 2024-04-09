@@ -21,7 +21,7 @@ export class AuthService {
     const payload = { email, password };
 
     return {
-      token: this.jwtService.sign(payload, { secret: process.env.JWT_SECRET }),
+      token: this.jwtService.sign(payload),
     }
   }
 }
