@@ -7,12 +7,14 @@ import {
 
 @Injectable()
 export class MongooseConfigService implements MongooseOptionsFactory {
+  constructor(private configService: ConfigService) {}
+
   createMongooseOptions(): MongooseModuleOptions {
     return {
-      uri: process.env.DB_URI,
-      dbName: process.env.DB_NAME,
-      user: process.env.DB_USER,
-      pass: process.env.DB_PASS,
+      uri: this.configService.get<string>('database.uri'),
+      dbName: this.configService.get<string>('database.name'),
+      user: this.configService.get<string>('database.user'),
+      pass: this.configService.get<string>('database.pass')
     };
   }
 }
