@@ -27,6 +27,7 @@
       "correctness": {
         "all": true,
         "noUnusedVariables": "warn",
+        "useImportExtensions": "off",
         "useArrayLiterals": "off"
       },
       "style": {
@@ -44,6 +45,9 @@
     }
   },
   "javascript": {
+    "parser": {
+      "unsafeParameterDecoratorsEnabled": true
+    },
     "formatter": {
       "jsxQuoteStyle": "double",
       "quoteProperties": "asNeeded",
