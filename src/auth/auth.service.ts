@@ -1,9 +1,9 @@
-import { Model } from 'mongoose';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AuthLoginDto } from './dto/auth-login.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { User } from 'src/database/schema/user.schema';
+import type { Model } from 'mongoose';
+import { User } from '../database/schema/user.schema';
+import type { AuthLoginDto } from './dto/auth-login.dto';
 
 @Injectable()
 export class AuthService {
@@ -16,9 +16,10 @@ export class AuthService {
     const { email, password } = loginDto;
 
     // do validate user input here
-    // if (email !== "tuyen@gmail.com" || password !== "1234") throw new UnauthorizedException();
+    const foundUser = await this.userModel.findOne({ email });
+    if (foundUser.password !== password) throw new UnauthorizedException();
 
-    const payload = { email, password };
+    const payload = { email, id: foundUser.id };
 
     return {
       token: this.jwtService.sign(payload),
