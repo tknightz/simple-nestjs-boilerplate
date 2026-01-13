@@ -1,0 +1,64 @@
+name: "NestJS Boilerplate Rules"
+description: "Code style and architecture rules for this NestJS project. See AGENTS.md for complete guidelines."
+globs: ["src/**/*.ts", "test/**/*.ts"]
+rules:
+  - name: "Use PascalCase for class names"
+    description: "All class names should use PascalCase (AuthService, AuthController, etc.)"
+    pattern: "class [a-z][a-zA-Z]*"
+    fix: "Convert to PascalCase"
+
+  - name: "Use camelCase for method names"
+    description: "All method names should use camelCase (getUser, createPost, etc.)"
+    pattern: "async [A-Z][a-zA-Z]*\("
+    fix: "Convert to camelCase"
+
+  - name: "Use type imports for interfaces"
+    description: "Use 'import type' for TypeScript types and interfaces"
+    pattern: "import \{[^}]*\} from"
+    fix: "Add 'type' keyword for type-only imports"
+
+  - name: "Use private readonly for injected services"
+    description: "Mark injected services as private readonly in constructors"
+    pattern: "constructor\([^)]*private [a-zA-Z]"
+    fix: "Add readonly modifier"
+
+  - name: "Use @ApiTags for controllers"
+    description: "Controllers should have @ApiTags decorator for Swagger documentation"
+    pattern: "@Controller\("
+    fix: "Add @ApiTags decorator"
+
+  - name: "Use version in controllers"
+    description: "Controllers should specify API version in decorator"
+    pattern: "@Controller\(\{[^}]*path:"
+    fix: "Add version: '1' to controller config"
+
+  - name: "Use class-validator decorators on DTOs"
+    description: "DTOs should use validation decorators like @IsNotEmpty, @IsEmail"
+    pattern: "export class.*Dto \{"
+    fix: "Add validation decorators to properties"
+
+  - name: "Use @ApiProperty for Swagger docs"
+    description: "DTO properties should have @ApiProperty decorators"
+    pattern: "@ApiProperty\("
+    fix: "Add @ApiProperty decorator"
+
+  - name: "Use @Schema decorator for Mongoose schemas"
+    description: "Database schemas should use @Schema decorator"
+    pattern: "export class.*\{"
+    fix: "Add @Schema decorator"
+
+  - name: "Export schema factory"
+    description: "Mongoose schemas should export SchemaFactory.createForClass"
+    pattern: "export const.*Schema ="
+    fix: "Use SchemaFactory.createForClass pattern"
+
+  - name: "Use async/await for all async operations"
+    description: "All asynchronous operations should use async/await pattern"
+    pattern: "\.then\("
+    fix: "Convert to async/await"
+
+  - name: "Use NestJS built-in exceptions"
+    description: "Throw NestJS exceptions like BadRequestException, UnauthorizedException"
+    pattern: "throw new Error"
+    fix: "Use NestJS exception classes"</content>
+<parameter name="filePath">.cursor/rules/nestjs-rules.mdc

@@ -1,8 +1,8 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { MongooseConfigService } from '../database/mongoose-config.service';
 import configuration from '../config/configuration';
+import { MongooseConfigService } from '../database/mongoose-config.service';
 
 /**
  * CoreModule encapsulates essential application infrastructure configurations.

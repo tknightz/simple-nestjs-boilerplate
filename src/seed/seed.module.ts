@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { SeedService } from './seed.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from '../database/schemas/user.schema';
 import { CoreModule } from '../core/core.module';
+import { User, UserSchema } from '../database/schemas/user.schema';
+import { SeedService } from './seed.service';
 
 @Module({
   imports: [
