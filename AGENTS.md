@@ -2,6 +2,14 @@
 
 This document provides guidelines for agentic coding agents working in this NestJS repository.
 
+## Agent Guidelines
+
+### Build Verification
+- **Do NOT run `bun run build` to verify code changes unless explicitly requested by the user**
+- Use LSP diagnostics (`lsp_diagnostics`) for real-time TypeScript error checking
+- Run linting (`bun run lint`) to ensure code style compliance
+- Only run build when the user specifically asks for it or when preparing for deployment
+
 ## Build, Lint, and Test Commands
 
 ### Build Commands
@@ -184,26 +192,47 @@ export const EntitySchema = SchemaFactory.createForClass(Entity);
 ### Database
 - MongoDB with Mongoose
 - Custom mongoose config service
-- Schemas in `src/database/schemas/`
+- Schemas in `src/modules/*/entities` (feature-specific entities)
 
 ### Scripts and Utilities
-- Seed scripts in `src/scripts/`
-- Seed services in `src/seed/`
+- Seed scripts in `src/core/scripts/`
+- Seed services in `src/core/seed/`
 - Use Bun for running scripts in development
 
 ## Project Structure
 
 ```
 src/
-├── app.module.ts           # Root module
 ├── main.ts                 # Application bootstrap
-├── config/                 # Configuration files
-├── core/                   # Core functionality
-├── database/               # Database schemas and config
-├── auth/                   # Authentication module
-├── user/                   # User management module
-├── seed/                   # Database seeding
-└── scripts/                # Utility scripts
+├── app.module.ts           # Root module
+├── modules/                # Feature modules
+│   ├── users/              # User management module
+│   │   ├── users.module.ts
+│   │   ├── users.controller.ts
+│   │   ├── users.service.ts
+│   │   ├── users.entity.ts
+│   │   └── dto/            # Data Transfer Objects
+│   └── auth/               # Authentication module
+│       ├── auth.module.ts
+│       ├── auth.controller.ts
+│       ├── auth.service.ts
+│       ├── jwt.strategy.ts
+│       ├── jwt-auth.guard.ts
+│       ├── types/
+│       └── dto/
+├── core/                   # App-wide infrastructure
+│   ├── core.module.ts      # Global configurations
+│   ├── mongoose-config.service.ts
+│   ├── seed/               # Database seeding
+│   └── scripts/            # Utility scripts
+├── common/                 # Shared utilities
+│   ├── filters/            # Exception filters
+│   ├── guards/             # Route guards
+│   ├── interceptors/       # Response interceptors
+│   ├── pipes/              # Validation pipes
+│   └── utils/              # Generic utilities
+└── config/                 # Centralized configuration
+    └── configuration.ts    # Environment configuration
 
 test/                       # E2E tests
 ```

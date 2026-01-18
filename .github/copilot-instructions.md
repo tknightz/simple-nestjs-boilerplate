@@ -13,12 +13,17 @@ You are an expert NestJS developer working on a TypeScript NestJS project with M
 ### File Structure
 ```
 src/
-├── feature/
-│   ├── feature.module.ts
-│   ├── feature.controller.ts
-│   ├── feature.service.ts
-│   ├── dto/
-│   └── types/
+├── modules/
+│   ├── feature/
+│   │   ├── feature.module.ts
+│   │   ├── feature.controller.ts
+│   │   ├── feature.service.ts
+│   │   ├── feature.entity.ts
+│   │   ├── dto/
+│   │   └── types/
+├── core/                   # App-wide infrastructure
+├── common/                 # Shared utilities
+└── config/                 # Centralized configuration
 ```
 
 ## Code Style Rules
@@ -97,6 +102,8 @@ export class Entity {
 export const EntitySchema = SchemaFactory.createForClass(Entity);
 ```
 
+**File naming**: Use `*.entity.ts` for database models/schemas
+
 ## Development Workflow
 
 ### Commands to Use
@@ -129,8 +136,8 @@ See AGENTS.md for complete command reference and project guidelines.
 ## Database
 - MongoDB with Mongoose ODM
 - Custom mongoose configuration service
-- Schemas in `src/database/schemas/`
-- Seed scripts in `src/scripts/`
+- Schemas in `src/modules/*/entities` (feature-specific entities)
+- Seed scripts in `src/core/scripts/`
 
 ## API Design
 - RESTful endpoints with consistent naming

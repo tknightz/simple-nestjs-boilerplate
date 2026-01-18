@@ -1,64 +1,66 @@
+---
 name: "NestJS Boilerplate Rules"
 description: "Code style and architecture rules for this NestJS project. See AGENTS.md for complete guidelines."
 globs: ["src/**/*.ts", "test/**/*.ts"]
+---
+
 rules:
   - name: "Use PascalCase for class names"
     description: "All class names should use PascalCase (AuthService, AuthController, etc.)"
-    pattern: "class [a-z][a-zA-Z]*"
+    pattern: "class [a-z][a-zA-Z0-9]*"
     fix: "Convert to PascalCase"
 
   - name: "Use camelCase for method names"
     description: "All method names should use camelCase (getUser, createPost, etc.)"
-    pattern: "async [A-Z][a-zA-Z]*\("
+    pattern: "(async |public |private |protected )?[A-Z][a-zA-Z0-9]*\s*\("
     fix: "Convert to camelCase"
 
-  - name: "Use type imports for interfaces"
-    description: "Use 'import type' for TypeScript types and interfaces"
+  - name: "Use type imports for interfaces and types"
+    description: "Use 'import type' for TypeScript types, interfaces, and type-only imports (e.g., Model, RequestWithUser)"
     pattern: "import \{[^}]*\} from"
-    fix: "Add 'type' keyword for type-only imports"
+    fix: "Add 'type' keyword for type-only imports: import type { ... }"
 
   - name: "Use private readonly for injected services"
     description: "Mark injected services as private readonly in constructors"
-    pattern: "constructor\([^)]*private [a-zA-Z]"
-    fix: "Add readonly modifier"
+    pattern: "constructor\([^)]*private (?!readonly )[a-zA-Z]"
+    fix: "Add readonly modifier: private readonly serviceName:"
 
   - name: "Use @ApiTags for controllers"
     description: "Controllers should have @ApiTags decorator for Swagger documentation"
     pattern: "@Controller\("
-    fix: "Add @ApiTags decorator"
+    fix: "Add @ApiTags('TagName') decorator above @Controller"
 
   - name: "Use version in controllers"
     description: "Controllers should specify API version in decorator"
-    pattern: "@Controller\(\{[^}]*path:"
-    fix: "Add version: '1' to controller config"
+    pattern: "@Controller\(\{[^}]*path:[^}]*\}"
+    fix: "Add version: '1' to controller config object: @Controller({ path: 'name', version: '1' })"
 
   - name: "Use class-validator decorators on DTOs"
     description: "DTOs should use validation decorators like @IsNotEmpty, @IsEmail"
-    pattern: "export class.*Dto \{"
-    fix: "Add validation decorators to properties"
+    pattern: "export class.*Dto"
+    fix: "Add validation decorators (@IsNotEmpty, @IsEmail, etc.) to DTO properties"
 
   - name: "Use @ApiProperty for Swagger docs"
-    description: "DTO properties should have @ApiProperty decorators"
-    pattern: "@ApiProperty\("
-    fix: "Add @ApiProperty decorator"
+    description: "DTO properties should have @ApiProperty decorators for Swagger documentation"
+    pattern: "export class.*Dto"
+    fix: "Add @ApiProperty decorator above each DTO property"
 
   - name: "Use @Schema decorator for Mongoose schemas"
     description: "Database schemas should use @Schema decorator"
     pattern: "export class.*\{"
-    fix: "Add @Schema decorator"
+    fix: "Add @Schema() decorator above schema class in database/schemas/ files"
 
-  - name: "Export schema factory"
+  - name: "Export schema factory with SchemaFactory.createForClass"
     description: "Mongoose schemas should export SchemaFactory.createForClass"
     pattern: "export const.*Schema ="
-    fix: "Use SchemaFactory.createForClass pattern"
+    fix: "Use SchemaFactory.createForClass(ClassName) pattern"
 
   - name: "Use async/await for all async operations"
-    description: "All asynchronous operations should use async/await pattern"
+    description: "All asynchronous operations should use async/await pattern instead of .then()"
     pattern: "\.then\("
-    fix: "Convert to async/await"
+    fix: "Convert to async/await pattern"
 
   - name: "Use NestJS built-in exceptions"
-    description: "Throw NestJS exceptions like BadRequestException, UnauthorizedException"
-    pattern: "throw new Error"
-    fix: "Use NestJS exception classes"</content>
-<parameter name="filePath">.cursor/rules/nestjs-rules.mdc
+    description: "Throw NestJS exceptions like BadRequestException, UnauthorizedException instead of generic Error"
+    pattern: "throw new Error\("
+    fix: "Use NestJS exception classes (BadRequestException, UnauthorizedException, etc.)"</content>
