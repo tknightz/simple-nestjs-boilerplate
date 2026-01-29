@@ -118,7 +118,7 @@ export class FeatureController {
 @Injectable()
 export class FeatureService {
   constructor(
-    @InjectModel(Model.name) private model: Model<Model>,
+    @InjectRepository(Entity) private repository: Repository<Entity>,
     private otherService: OtherService,
   ) {}
 
@@ -143,19 +143,20 @@ export class CreateDto {
 }
 ```
 
-#### Database Schemas
-- Use @Schema() decorator
-- Use @Prop() for properties
-- Export both class and schema factory
+#### Database Entities
+- Use @Entity() decorator
+- Use @Column() for properties
+- Use @PrimaryGeneratedColumn() for ID
 
 ```typescript
-@Schema()
+@Entity()
 export class Entity {
-  @Prop()
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
   property: string;
 }
-
-export const EntitySchema = SchemaFactory.createForClass(Entity);
 ```
 
 ### Error Handling
@@ -190,9 +191,9 @@ export const EntitySchema = SchemaFactory.createForClass(Entity);
 - Use supertest for HTTP endpoint testing
 
 ### Database
-- MongoDB with Mongoose
-- Custom mongoose config service
-- Schemas in `src/modules/*/entities` (feature-specific entities)
+- PostgreSQL with TypeORM
+- Custom typeorm config service
+- Entities in `src/modules/*/entities` (feature-specific entities)
 
 ### Scripts and Utilities
 - Seed scripts in `src/core/scripts/`
@@ -222,7 +223,7 @@ src/
 │       └── dto/
 ├── core/                   # App-wide infrastructure
 │   ├── core.module.ts      # Global configurations
-│   ├── mongoose-config.service.ts
+│   ├── typeorm-config.service.ts
 │   ├── seed/               # Database seeding
 │   └── scripts/            # Utility scripts
 ├── common/                 # Shared utilities

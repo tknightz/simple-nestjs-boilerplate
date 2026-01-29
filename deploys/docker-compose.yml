@@ -10,18 +10,20 @@ services:
     environment:
       NODE_ENV: ${NODE_ENV}
       PORT: ${PORT}
-      DB_URI: mongodb://${DB_USER}:${DB_PASS}@mongo:27017/${DB_NAME}?authSource=admin
+      DB_HOST: postgres
+      DB_PORT: 5432
       DB_USER: ${DB_USER:?error}
       DB_PASS: ${DB_PASS:?error}
       DB_NAME: ${DB_NAME}
-    depends_on: [mongo]
-  mongo:
-    image: mongo:8.0.4
-    container_name: nestjs-mongo
+    depends_on: [postgres]
+  postgres:
+    image: postgres:16-alpine
+    container_name: nestjs-postgres
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASS}
-    volumes: [nestjs-mongo-db:/data/db]
-    ports: ['${DB_PORT:-27017}:27017']
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
+    volumes: [nestjs-postgres-db:/var/lib/postgresql/data]
+    ports: ['${DB_PORT:-5432}:5432']
 volumes:
-  nestjs-mongo-db:
+  nestjs-postgres-db:

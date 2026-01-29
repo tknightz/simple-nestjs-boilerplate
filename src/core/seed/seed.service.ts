@@ -1,21 +1,24 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { User, UserDocument } from '../../modules/users/users.entity';
+import { UsersService } from '../../modules/users/users.service';
 import { usersSeed } from './data/users.seed';
 
 @Injectable()
 export class SeedService {
   private readonly logger = new Logger(SeedService.name);
 
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(private usersService: UsersService) {}
 
   async seed() {
     await this.seedUsers();
   }
 
   async seedUsers() {
-    const users = await this.userModel.create(usersSeed);
-    this.logger.log(`Seeded ${users.length} users`);
+    for (const user of usersSeed) {
+      const exists = await this.usersService.findByEmail(user.email);
+      if (!exists) {
+        await this.usersService.create(user);
+      }
+    }
+    this.logger.log('Seeded users');
   }
 }

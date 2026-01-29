@@ -1,14 +1,12 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { InjectModel } from '@nestjs/mongoose';
-import type { Model } from 'mongoose';
-import { User } from '../users/users.entity';
+import { UsersService } from '../users/users.service';
 import type { AuthLoginDto } from './dto/auth-login.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User.name) private userModel: Model<User>,
+    private usersService: UsersService,
     private jwtService: JwtService,
   ) {}
 
@@ -16,8 +14,10 @@ export class AuthService {
     const { email, password } = loginDto;
 
     // do validate user input here
-    const foundUser = await this.userModel.findOne({ email });
-    if (foundUser.password !== password) throw new UnauthorizedException();
+    const foundUser = await this.usersService.findByEmail(email);
+    if (!foundUser || foundUser.password !== password) {
+      throw new UnauthorizedException();
+    }
 
     const payload = { email, id: foundUser.id };
 

@@ -5,7 +5,7 @@ A modern, feature-complete NestJS boilerplate with MongoDB, JWT authentication, 
 ## Features
 
 - 🚀 **NestJS Framework** - Progressive Node.js framework for building efficient, reliable and scalable server-side applications
-- 📦 **MongoDB & Mongoose** - NoSQL database with ODM for data modeling
+- 📦 **PostgreSQL & TypeORM** - SQL database with ORM for data modeling
 - 🔐 **JWT Authentication** - Secure authentication with Passport.js and JWT tokens
 - 📋 **Validation & Serialization** - Input validation with class-validator and class-transformer
 - 📚 **API Documentation** - Auto-generated Swagger/OpenAPI documentation
@@ -36,7 +36,7 @@ src/
 │       └── dto/
 ├── core/                   # App-wide infrastructure
 │   ├── core.module.ts      # Global configurations
-│   ├── mongoose-config.service.ts
+│   ├── typeorm-config.service.ts
 │   ├── seed/               # Database seeding
 │   └── scripts/            # Utility scripts
 ├── common/                 # Shared utilities
@@ -54,7 +54,7 @@ src/
 ### Prerequisites
 
 - Node.js 18+ or Bun
-- MongoDB (local or cloud instance)
+- PostgreSQL (local or cloud instance)
 
 ### Installation
 
@@ -69,8 +69,8 @@ bun install
 # Copy environment variables
 cp .env.example .env
 
-# Start MongoDB (if running locally)
-mongod
+# Start PostgreSQL
+docker-compose up -d postgres
 
 # Run development server
 bun run start:dev
@@ -82,7 +82,11 @@ Create a `.env` file in the root directory:
 
 ```env
 # Database
-MONGODB_URI=mongodb://localhost:27017/nestjs-boilerplate
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASS=postgres
+DB_NAME=nestjs_boilerplate
 
 # JWT
 JWT_SECRET=your-super-secret-jwt-key
@@ -145,9 +149,9 @@ Once the server is running, visit `http://localhost:3000/api` to access the Swag
 - **Error Handling**: NestJS built-in exceptions
 
 ### Database
-- **ODM**: Mongoose for MongoDB integration
-- **Schemas**: Decorated classes with `@Schema()` and `@Prop()`
-- **Models**: Injected with `@InjectModel()` decorator
+- **ORM**: TypeORM for PostgreSQL integration
+- **Entities**: Decorated classes with `@Entity()` and `@Column()`
+- **Repositories**: Injected with `@InjectRepository()` decorator
 
 ## Contributing
 
